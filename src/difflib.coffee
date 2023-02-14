@@ -26,7 +26,6 @@ Class Differ:
 # Requires
 {floor, max, min} = Math
 Heap = require('heap')
-assert = require('assert')
 
 # Helper functions
 _calculateRatio = (matches, length) ->
@@ -862,7 +861,7 @@ class Differ
         when 'equal'
           g = @_dump(' ', a, alo, ahi)
         else
-          throw new Error("unknow tag (#{tag})")
+          throw new Error("unknown tag (#{tag})")
       lines.push(line) for line in g
     lines
 
@@ -873,7 +872,8 @@ class Differ
     ("#{tag} #{x[i]}" for i in [lo...hi])
 
   _plainReplace: (a, alo, ahi, b, blo, bhi) ->
-    assert(alo < ahi and blo < bhi)
+    unless alo < ahi and blo < bhi
+      throw new Error("lows must be lower than highs: (#{alo} < #{ahi}, #{blo} < #{bhi})")
     # dump the shorter block first -- reduces the burden on short-term
     # memory if the blocks are of very different sizes
     if bhi - blo < ahi - alo
